@@ -39,10 +39,13 @@ rm -f $TMP_FILE_DATA
 rm -f $TMP_FILE_DATA"_tmp"
 
 grep -oE "errorCode=[0-9]{4}" $INPUT_FILE | cut -f2 -d"=" > $TMP_FILE_ERRORS
-LISTEN_ONLY_ATTEMPTS=$(grep -oE "user requested to connect to audio" $INPUT_FILE | wc -l)
+LISTEN_ONLY_ATTEMPTS=$(grep -oE "user requested to connect to audio" \
+  $INPUT_FILE | wc -l)
+
 MIC_ATTEMPTS=$(grep -oE "User requested to join audio" $INPUT_FILE | wc -l)
 TOTAL_AMOUNT_OF_ERRORS=$(wc -l < $TMP_FILE_ERRORS)
-ERROR_PER_ATTEMPTS_PERCENTAGE=$(echo "scale=2;($TOTAL_AMOUNT_OF_ERRORS/($LISTEN_ONLY_ATTEMPTS+$MIC_ATTEMPTS))*100" | bc)
+ERROR_PER_ATTEMPTS_PERCENTAGE=$(echo "scale=2;($TOTAL_AMOUNT_OF_ERRORS/(\
+  $LISTEN_ONLY_ATTEMPTS+$MIC_ATTEMPTS))*100" | bc)
 
 ERROR_CODES=(
   1002
