@@ -60,10 +60,19 @@ ERROR_CODES=(
 for code in ${ERROR_CODES[@]}
 do
   NUMBER_OF_ERRORS=$(grep -c $code $TMP_FILE_ERRORS)
-  PERCENTAGE=$(echo "scale=2;($NUMBER_OF_ERRORS/$TOTAL_AMOUNT_OF_ERRORS)*100" | bc)
+  PERCENTAGE=$(echo "scale=2;($NUMBER_OF_ERRORS/$TOTAL_AMOUNT_OF_ERRORS)*\
+    100" | bc)
   echo "$code $NUMBER_OF_ERRORS $PERCENTAGE%" >> $TMP_FILE_DATA"_tmp"
 done
 
 sort -n -k2 --reverse $TMP_FILE_DATA"_tmp" > $TMP_FILE_DATA
 
-gnuplot -p -e "set xlabel \"Error Codes\\n\\n (file: $INPUT_FILE)\"; set ylabel '#Total Amount of Errors (TAE): $TOTAL_AMOUNT_OF_ERRORS'; set key off; set title \"Audio Errors Frequency (%)\\n\\n(#Microphone Attempts (MA): $MIC_ATTEMPTS , #Listen-only Attempts (LA): $LISTEN_ONLY_ATTEMPTS , TAE/(MA+LA): $ERROR_PER_ATTEMPTS_PERCENTAGE%)\\n\\n\"; set boxwidth 0.5;set style fill solid;plot '$TMP_FILE_DATA' using 2:xtic(1) with boxes linecolor rgb '#6EC1E4', '' u 0:2:3 with labels offset 0,1"
+gnuplot -p -e "set xlabel \"Error Codes\\n\\n (file: $INPUT_FILE)\"; \
+  set ylabel '#Total Amount of Errors (TAE): $TOTAL_AMOUNT_OF_ERRORS'; \
+  set key off; set title \"Audio Errors Frequency (%) \
+  \\n\\n(#Microphone Attempts (MA): $MIC_ATTEMPTS , \
+  #Listen-only Attempts (LA): $LISTEN_ONLY_ATTEMPTS , \
+  TAE/(MA+LA): $ERROR_PER_ATTEMPTS_PERCENTAGE%)\\n\\n\"; \
+  set boxwidth 0.5;set style fill solid;plot '$TMP_FILE_DATA' \
+  using 2:xtic(1) with boxes linecolor rgb '#6EC1E4', \
+  '' u 0:2:3 with labels offset 0,1"
